@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -47,9 +48,11 @@ int main(int argc, char **argv) {
       return 0;
     }
 
-    errno = 0;
+    char *s = argv[i];
+    while (*s && isdigit(*s++));
+    const bool is_num = *s == '\0';
     long pin_arg = strtol(argv[i], NULL, 10);
-    if (errno == 0 && pin_arg >= 0 && (size_t)pin_arg <= GPIO_PINS) {
+    if (is_num && pin_arg >= 0 && (size_t)pin_arg <= GPIO_PINS) {
       monitor_pin = pin_arg;
     }
   }
