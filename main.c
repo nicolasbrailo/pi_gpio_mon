@@ -22,7 +22,10 @@ typedef unsigned int gpio_reg_t;
 // https://www.cs.uaf.edu/2016/fall/cs301/lecture/11_09_raspberry_pi.html
 
 atomic_bool gUsrStop = false;
-void sighandler(int) { gUsrStop = true; }
+void sighandler(int unused) {
+    (void) unused;
+    gUsrStop = true;
+}
 
 int main(int argc, char **argv) {
   bool update_in_place = false;
@@ -75,7 +78,7 @@ int main(int argc, char **argv) {
 
   printf("CNT ");
   for (size_t i = 0; i < GPIO_PINS; ++i) {
-    printf("P%02lu ", i);
+    printf("P%02zu ", i);
   }
   printf("\n");
 
@@ -84,7 +87,7 @@ int main(int argc, char **argv) {
   while (!gUsrStop) {
 #define COL_NOO "\x1B[0m"
 #define COL_RED "\x1B[31m"
-    printf("%s%03lu", COL_NOO, print_cnt++);
+    printf("%s%03zu", COL_NOO, print_cnt++);
     gpio_reg_t gpio_ins = gpio_mem[GPIO_INPUTS];
 
     size_t pin_start = 0;
